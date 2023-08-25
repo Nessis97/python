@@ -59,7 +59,7 @@ def _cleanup_temp_files():
             pass
     _temp_files = {}
 
-
+# dependency injection for testing
 def _create_temp_file_with_content(content, temp_file_path=None):
     if len(_temp_files) == 0:
         atexit.register(_cleanup_temp_files)
@@ -77,7 +77,7 @@ def _create_temp_file_with_content(content, temp_file_path=None):
         fd.write(content.encode() if isinstance(content, str) else content)
     return name
 
-
+# dependency injection for testing
 def _is_expired(expiry):
     return ((parse_rfc3339(expiry) - EXPIRY_SKEW_PREVENTION_DELAY) <=
             datetime.datetime.utcnow().replace(tzinfo=UTC))
