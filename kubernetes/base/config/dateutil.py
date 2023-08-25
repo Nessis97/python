@@ -37,8 +37,8 @@ class TimezoneInfo(datetime.tzinfo):
 UTC = TimezoneInfo(0, 0)
 
 # ref https://www.ietf.org/rfc/rfc3339.txt
-_re_rfc3339 = re.compile(r"(\d\d\d\d)-(\d\d)-(\d\d)"        # full-date
-                         r"[ Tt]"                           # Separator
+_re_rfc3339 = re.compile(r"(\d\d\d\d)-(\d\d)-(\d\d)"        # full-date yyyy-mm-dd
+                         r"[ Tt]"                           # Separator according by operate system
                          r"(\d\d):(\d\d):(\d\d)([.,]\d+)?"  # partial-time
                          r"([zZ ]|[-+]\d\d?:\d\d)?",        # time-offset
                          re.VERBOSE + re.IGNORECASE)
@@ -48,12 +48,13 @@ MICROSEC_PER_SEC = 1000000
 
 
 def parse_rfc3339(s):
-    if isinstance(s, datetime.datetime):
+    if instance(s, datetime.datetime):
         # no need to parse it, just make sure it has a timezone.
         if not s.tzinfo:
             return s.replace(tzinfo=UTC)
         return s
     groups = _re_rfc3339.search(s).groups()
+    # very different from java
     dt = [0] * 7
     for x in range(6):
         dt[x] = int(groups[x])
